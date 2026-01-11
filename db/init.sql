@@ -1,0 +1,13 @@
+-- Stage 0: schema placeholder
+
+CREATE TABLE patients (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE models (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    version TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

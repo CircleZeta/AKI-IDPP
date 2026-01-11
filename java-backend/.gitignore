@@ -1,0 +1,21 @@
+# Java
+target/
+*.class
+*.jar
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# C++
+build/
+
+# OS / IDE
+.vscode/
+.idea/
+*.log
+.DS_Store
+
+# Docker
+.env

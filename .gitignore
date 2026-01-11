@@ -1,0 +1,50 @@
+# ==========================
+# Java (全局)
+# ==========================
+java-backend/target/
+java-backend/*.class
+java-backend/*.jar
+*.log
+
+# Maven Wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# ==========================
+# Python (全局)
+# ==========================
+python-ml/__pycache__/
+python-ml/*.pyc
+python-ml/.venv/
+python-ml/.mypy_cache/
+python-ml/.pytest_cache/
+python-ml/.env
+
+# ==========================
+# C++ (全局)
+# ==========================
+cpp-accelerator/build/
+cpp-accelerator/*.o
+cpp-accelerator/*.exe
+
+# ==========================
+# Docker / Environment
+# ==========================
+docker/.env
+docker-compose.override.yml
+
+# ==========================
+# OS / IDE / Editors
+# ==========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Logs / temp
+# ==========================
+*.log
+*.tmp
+*.swp
