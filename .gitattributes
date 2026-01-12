@@ -1,0 +1,3 @@
+# AKI-IDPP/.gitattributes
+# 强制所有文本文件统一 LF 换行符
+* text=auto eol=lf
