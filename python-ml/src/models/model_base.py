@@ -1,15 +1,27 @@
-import pandas as pd
+# model_base.py
+# 模型训练基类
 
-class BaseModel:
-    def __init__(self):
-        self.trained = False
+import pickle
+from abc import ABC, abstractmethod
 
-    def train(self, X: pd.DataFrame, y: pd.Series):
-        # TODO: implement training
-        self.trained = True
+class ModelBase(ABC):
+    """机器学习模型基类，所有模型需继承此类"""
 
-    def predict(self, X: pd.DataFrame) -> pd.Series:
-        if not self.trained:
-            raise RuntimeError('Model not trained yet')
-        # TODO: implement prediction
-        return pd.Series([0]*len(X))
+    @abstractmethod
+    def fit(self, X, y):
+        pass
+
+    @abstractmethod
+    def predict(self, X):
+        pass
+
+    def save(self, path: str):
+        """保存模型到文件"""
+        with open(path, 'wb') as f:
+            pickle.dump(self, f)
+
+    @classmethod
+    def load(cls, path: str):
+        """从文件加载模型"""
+        with open(path, 'rb') as f:
+            return pickle.load(f)
