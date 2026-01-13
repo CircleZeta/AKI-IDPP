@@ -1,27 +1,38 @@
-# model_base.py
-# 模型训练基类
-
-import pickle
+import joblib
 from abc import ABC, abstractmethod
+from sklearn.base import BaseEstimator
 
 class ModelBase(ABC):
-    """机器学习模型基类，所有模型需继承此类"""
+    """
+    基础模型类，定义训练、预测和模型持久化接口
+    所有具体模型应继承此类
+    """
+    def __init__(self):
+        self.model = None  # 具体模型实例
 
     @abstractmethod
+    def build_model(self) -> BaseEstimator:
+        """
+        构建具体模型实例（sklearn / pytorch / 其他）
+        """
+        pass
+
     def fit(self, X, y):
-        pass
+        if self.model is None:
+            self.model = self.build_model()
+        self.model.fit(X, y)
+        return self
 
-    @abstractmethod
     def predict(self, X):
-        pass
+        if self.model is None:
+            raise RuntimeError("Model is not built. Call build_model() or fit() first.")
+        return self.model.predict(X)
 
     def save(self, path: str):
-        """保存模型到文件"""
-        with open(path, 'wb') as f:
-            pickle.dump(self, f)
+        if self.model is None:
+            raise RuntimeError("No model to save.")
+        joblib.dump(self.model, path)
 
-    @classmethod
-    def load(cls, path: str):
-        """从文件加载模型"""
-        with open(path, 'rb') as f:
-            return pickle.load(f)
+    def load(self, path: str):
+        self.model = joblib.load(path)
+        return self
