@@ -1,27 +1,41 @@
-# feature_engineering.py
-# 数据预处理与特征工程模块
-
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
-class FeatureEngineer:
-    """负责数据清洗、特征生成与标准化"""
-
+class FeatureEngineering:
     def __init__(self):
-        self.scaler = StandardScaler()
+        self.num_features = []
+        self.cat_features = []
+        self.pipeline = None
 
-    def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
-        """拟合并转换训练数据"""
-        df_processed = self._preprocess(df)
-        return self.scaler.fit_transform(df_processed)
+    def fit(self, df: pd.DataFrame, num_features: list, cat_features: list):
+        self.num_features = num_features
+        self.cat_features = cat_features
+
+        numeric_transformer = Pipeline(steps=[
+            ('scaler', StandardScaler())
+        ])
+        categorical_transformer = Pipeline(steps=[
+            ('onehot', OneHotEncoder(handle_unknown='ignore'))
+        ])
+
+        self.pipeline = ColumnTransformer(
+            transformers=[
+                ('num', numeric_transformer, self.num_features),
+                ('cat', categorical_transformer, self.cat_features)
+            ]
+        )
+
+        self.pipeline.fit(df)
+        return self
 
     def transform(self, df: pd.DataFrame) -> pd.DataFrame:
-        """转换测试或验证数据"""
-        df_processed = self._preprocess(df)
-        return self.scaler.transform(df_processed)
+        if self.pipeline is None:
+            raise RuntimeError("Pipeline is not fitted yet. Call fit() first.")
+        transformed = self.pipeline.transform(df)
+        return pd.DataFrame(transformed)
 
-    def _preprocess(self, df: pd.DataFrame) -> pd.DataFrame:
-        """内部数据清洗方法（可根据需求扩展）"""
-        df_clean = df.copy()
-        # TODO: 添加缺失值处理、特征衍生等
-        return df_clean
+    def fit_transform(self, df: pd.DataFrame, num_features: list, cat_features: list) -> pd.DataFrame:
+        self.fit(df, num_features, cat_features)
+        return self.transform(df)
