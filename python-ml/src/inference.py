@@ -1,20 +1,13 @@
-from models.model_base import ModelBase
-from features.feature_engineering import build_features
+from models.model_base import BaseModel
+from features.feature_engineering import FeatureEngineer
+import pandas as pd
 
-def run_inference(raw_input: dict) -> dict:
-    """
-    raw_input: data from Java side (JSON -> dict)
-    """
-    features = build_features(raw_input)
+class InferenceEngine:
+    def __init__(self):
+        self.model = BaseModel()
+        self.feature_engineer = FeatureEngineer()
 
-    model = ModelBase()
-    result = model.predict(features)
-
-    return result
-
-
-if __name__ == "__main__":
-    # manual test stub
-    sample_input = {}
-    output = run_inference(sample_input)
-    print(output)
+    def predict(self, raw_df: pd.DataFrame) -> pd.DataFrame:
+        X = self.feature_engineer.fit_transform(raw_df)
+        preds = self.model.predict(X)
+        return pd.DataFrame({'prediction': preds})

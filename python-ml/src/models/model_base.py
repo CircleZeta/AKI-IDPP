@@ -1,16 +1,15 @@
-class ModelBase:
-    def __init__(self):
-        self.name = "AKI_BASE_MODEL"
-        self.version = "0.1.0"
+import pandas as pd
 
-    def predict(self, features: dict) -> dict:
-        """
-        features: output of build_features
-        return: prediction result dict
-        """
-        # placeholder inference
-        return {
-            "aki_risk_score": 0.0,
-            "model_name": self.name,
-            "model_version": self.version
-        }
+class BaseModel:
+    def __init__(self):
+        self.trained = False
+
+    def train(self, X: pd.DataFrame, y: pd.Series):
+        # TODO: implement training
+        self.trained = True
+
+    def predict(self, X: pd.DataFrame) -> pd.Series:
+        if not self.trained:
+            raise RuntimeError('Model not trained yet')
+        # TODO: implement prediction
+        return pd.Series([0]*len(X))

@@ -1,11 +1,17 @@
-def build_features(raw_input: dict) -> dict:
-    """
-    raw_input: serialized patient data (from Java or ETL)
-    return: feature dict consumed by model
-    """
-    # placeholder implementation
-    return {
-        "age": raw_input.get("age"),
-        "creatinine": raw_input.get("creatinine"),
-        "timestamp": raw_input.get("timestamp")
-    }
+import pandas as pd
+
+class FeatureEngineer:
+    def __init__(self):
+        pass
+
+    def fit(self, df: pd.DataFrame):
+        # TODO: fit transformations
+        return self
+
+    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        # TODO: apply transformations
+        return df
+
+    def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        self.fit(df)
+        return self.transform(df)
